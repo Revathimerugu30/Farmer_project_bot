@@ -1,0 +1,38 @@
+FERTILIZER GUIDE FOR INDIAN AGRICULTURE
+
+Macronutrients:
+- Nitrogen (N): Promotes leafy growth. Sources: Urea (46% N), CAN (25% N), DAP (18% N).
+- Phosphorus (P): Root development, flowering. Sources: SSP (16% P), DAP (46% P2O5).
+- Potassium (K): Disease resistance, fruit quality. Sources: MOP (60% K2O), SOP (50% K2O).
+
+NPK Recommendations by Crop:
+- Rice: N:P:K = 120:60:40 kg/ha. Split nitrogen into 3 doses.
+- Wheat: N:P:K = 120:60:40 kg/ha. Apply P and K as basal dose.
+- Maize: N:P:K = 180:80:60 kg/ha. High nitrogen feeder.
+- Cotton: N:P:K = 150:75:75 kg/ha.
+- Sugarcane: N:P:K = 250:100:120 kg/ha.
+- Tomato: N:P:K = 150:100:120 kg/ha.
+
+Organic Fertilizers:
+- Vermicompost: 5–10 t/ha. Improves soil structure and microbial activity.
+- FYM (Farm Yard Manure): 10–15 t/ha. Apply 2–3 weeks before sowing.
+- Green Manuring: Dhaincha, Sunhemp. Plow in 45–50 days after sowing.
+- Neem Cake: 200–400 kg/ha. Also acts as nematicide.
+- Bone Meal: Good source of phosphorus for organic farming.
+- Wood Ash: Source of potassium. Apply 2–4 t/ha.
+
+Micronutrients:
+- Zinc deficiency: Apply Zinc Sulphate 25 kg/ha. Common in rice-wheat system.
+- Iron deficiency: Ferrous Sulphate 25 kg/ha. Common in alkaline soils.
+- Boron: Borax 10 kg/ha for oilseeds and vegetables.
+- Manganese: Manganese Sulphate for sandy soils.
+
+Soil pH Correction:
+- Acidic soil (pH < 6.0): Apply agricultural lime 2–4 t/ha.
+- Alkaline soil (pH > 8.0): Apply gypsum 5–10 t/ha or elemental sulfur.
+
+Biofertilizers:
+- Rhizobium: For legume crops (chickpea, soybean). Seed treatment.
+- Azotobacter: For non-legume crops. Nitrogen fixation.
+- PSB (Phosphate Solubilizing Bacteria): Improves phosphorus availability.
+- Mycorrhiza: Improves nutrient and water uptake.

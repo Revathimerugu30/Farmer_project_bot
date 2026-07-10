@@ -1,0 +1,45 @@
+IRRIGATION METHODS AND WATER MANAGEMENT
+
+Irrigation Methods:
+1. Drip Irrigation:
+   - Water use efficiency: 90–95%.
+   - Best for: Fruits, vegetables, orchards, sugarcane.
+   - Subsidy available under PM Krishi Sinchai Yojana.
+   - Cost: ₹50,000–1,50,000 per ha. ROI within 2–3 years.
+
+2. Sprinkler Irrigation:
+   - Water use efficiency: 70–80%.
+   - Best for: Wheat, groundnut, vegetables, fodder crops.
+   - Suitable for undulating terrain.
+   - Cost: ₹20,000–60,000 per ha.
+
+3. Flood Irrigation:
+   - Water use efficiency: 40–50%.
+   - Traditional method. High water use.
+   - Still common for rice in India.
+
+4. Furrow Irrigation:
+   - Better than flood for row crops.
+   - Suitable for maize, cotton, sugarcane.
+
+Water Requirements by Crop:
+- Rice: 1200–2000 mm total water requirement.
+- Wheat: 400–500 mm. Irrigate at crown root initiation, tillering, jointing, flowering, grain filling.
+- Maize: 500–700 mm. Critical stages: tasseling, silking.
+- Sugarcane: 1500–2500 mm.
+- Cotton: 700–1200 mm.
+- Tomato: 400–600 mm.
+- Groundnut: 400–600 mm.
+
+Irrigation Scheduling:
+- Irrigate based on soil moisture, not fixed schedule.
+- Use tensiometer or feel method to check soil moisture.
+- Critical irrigation stages vary by crop.
+- Avoid waterlogging; ensure proper drainage.
+
+Water Conservation Tips:
+- Laser land leveling improves irrigation efficiency by 20–25%.
+- Night irrigation reduces evaporation losses.
+- Reuse drainage water for irrigation.
+- Check-basin method for fruit orchards.
+- Rainwater harvesting through farm ponds.

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Pest Detection – AgriBot{% endblock %}
+{% block page_title %}<i class="bi bi-bug-fill me-1"></i> Pest & Disease Detection{% endblock %}
+
+{% block content %}
+<div class="row g-3">
+  <div class="col-md-5">
+    <div class="card agri-card">
+      <div class="card-header fw-semibold"><i class="bi bi-camera me-1 text-success"></i>Upload Crop Image</div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label class="form-label">Crop Name</label>
+          <input type="text" id="pestCropName" class="form-control" placeholder="e.g. Tomato, Wheat, Rice…"/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Describe Symptoms</label>
+          <textarea id="pestSymptoms" class="form-control" rows="3"
+            placeholder="e.g. Yellow spots on leaves, wilting, white powder on stem…"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Upload Image (optional)</label>
+          <div class="upload-dropzone" id="pestDropzone">
+            <i class="bi bi-cloud-upload fs-2 text-muted"></i>
+            <p class="text-muted small mt-2">Drag & drop or click to upload</p>
+            <input type="file" id="pestImage" accept="image/*" class="d-none"/>
+          </div>
+          <div id="pestImagePreview" class="mt-2 d-none">
+            <img id="pestPreviewImg" src="" class="img-fluid rounded" style="max-height:200px;"/>
+          </div>
+        </div>
+        <button class="btn btn-danger w-100" id="detectPestBtn">
+          <span class="spinner-border spinner-border-sm d-none me-1" id="pestSpinner"></span>
+          <i class="bi bi-search me-1"></i>Detect Pest / Disease
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-7">
+    <div class="card agri-card h-100">
+      <div class="card-header fw-semibold"><i class="bi bi-robot me-1 text-success"></i>Diagnosis & Treatment</div>
+      <div class="card-body">
+        <div id="pestResult" class="ai-result-box">
+          <div class="text-center text-muted py-5">
+            <i class="bi bi-bug display-4 d-block mb-2 opacity-25"></i>
+            Upload an image or describe symptoms to get AI diagnosis.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/pest.js') }}"></script>
+{% endblock %}

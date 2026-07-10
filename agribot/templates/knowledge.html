@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Knowledge Base – AgriBot{% endblock %}
+{% block page_title %}<i class="bi bi-book-fill me-1"></i> RAG Knowledge Base{% endblock %}
+
+{% block content %}
+<div class="row g-3">
+  <!-- Upload -->
+  <div class="col-md-5">
+    <div class="card agri-card">
+      <div class="card-header fw-semibold"><i class="bi bi-cloud-upload me-1 text-success"></i>Upload Document</div>
+      <div class="card-body">
+        <div class="upload-dropzone mb-3" id="docDropzone">
+          <i class="bi bi-file-earmark-pdf-fill fs-2 text-danger"></i>
+          <p class="text-muted small mt-2">PDF, TXT, or DOCX files</p>
+          <input type="file" id="docUpload" accept=".pdf,.txt,.docx" class="d-none"/>
+        </div>
+        <div id="uploadFileName" class="small text-muted mb-2 d-none"></div>
+        <button class="btn btn-success w-100" id="uploadDocBtn" disabled>
+          <span class="spinner-border spinner-border-sm d-none me-1" id="uploadSpinner"></span>
+          <i class="bi bi-upload me-1"></i>Upload & Index
+        </button>
+        <div id="uploadResult" class="mt-2"></div>
+      </div>
+    </div>
+
+    <!-- Semantic Search -->
+    <div class="card agri-card mt-3">
+      <div class="card-header fw-semibold"><i class="bi bi-search me-1 text-primary"></i>Semantic Search</div>
+      <div class="card-body">
+        <div class="input-group mb-2">
+          <input type="text" id="ragQuery" class="form-control" placeholder="Search knowledge base…"/>
+          <button class="btn btn-primary" id="ragSearchBtn"><i class="bi bi-search"></i></button>
+        </div>
+        <div id="ragResults" class="small"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Indexed Documents -->
+  <div class="col-md-7">
+    <div class="card agri-card">
+      <div class="card-header d-flex align-items-center fw-semibold">
+        <i class="bi bi-files me-1 text-primary"></i>Indexed Documents
+        <button class="btn btn-sm btn-outline-danger ms-auto" id="clearRagBtn">
+          <i class="bi bi-trash3 me-1"></i>Clear All
+        </button>
+      </div>
+      <div class="card-body">
+        <div id="docList">
+          <div class="text-center text-muted py-4">
+            <i class="bi bi-folder2-open display-4 d-block mb-2 opacity-25"></i>
+            Loading documents…
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Built-in Seeds info -->
+    <div class="card agri-card mt-3">
+      <div class="card-header fw-semibold"><i class="bi bi-info-circle me-1 text-info"></i>Built-in Knowledge</div>
+      <div class="card-body">
+        <ul class="list-unstyled mb-0 small">
+          <li><i class="bi bi-check-circle-fill text-success me-1"></i>Crop Selection Guide (Kharif, Rabi, Zaid)</li>
+          <li><i class="bi bi-check-circle-fill text-success me-1"></i>Fertilizer Guide (NPK, Organic, Biofertilizers)</li>
+          <li><i class="bi bi-check-circle-fill text-success me-1"></i>Pest & Disease Management (IPM)</li>
+          <li><i class="bi bi-check-circle-fill text-success me-1"></i>Soil Health Management</li>
+          <li><i class="bi bi-check-circle-fill text-success me-1"></i>Irrigation Methods & Water Management</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/knowledge.js') }}"></script>
+{% endblock %}
