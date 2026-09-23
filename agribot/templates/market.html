@@ -1,74 +1,38 @@
 {% extends "base.html" %}
-{% block title %}Market Prices – AgriBot{% endblock %}
-{% block page_title %}<i class="bi bi-graph-up-arrow me-1"></i> Market Prices{% endblock %}
+{% block title %}Mandi Prices - AgriBot{% endblock %}
+{% block page_title %}<i class="bi bi-shop me-1"></i> Mandi Prices{% endblock %}
 
 {% block content %}
-<div class="row g-3">
-  <!-- Search Bar -->
-  <div class="col-12">
-    <div class="card agri-card">
-      <div class="card-body py-2">
-        <div class="row g-2 align-items-center">
-          <div class="col-md-6">
-            <div class="input-group input-group-sm">
-              <span class="input-group-text"><i class="bi bi-search"></i></span>
-              <input type="text" id="marketSearch" class="form-control" placeholder="Search crop…"/>
-            </div>
-          </div>
-          <div class="col-auto">
-            <button class="btn btn-sm btn-outline-secondary" id="refreshMarketBtn">
-              <i class="bi bi-arrow-repeat me-1"></i>Refresh
-            </button>
-          </div>
-          <div class="col-auto ms-auto">
-            <small class="text-muted">Prices in ₹/quintal &nbsp;|&nbsp; Updated today</small>
-          </div>
-        </div>
+<div class="market-page">
+  <div class="card agri-card market-search-card"><div class="card-body">
+    <div class="d-flex align-items-center gap-2 mb-3"><i class="bi bi-graph-up-arrow text-success fs-4"></i><div>
+      <h2 class="h5 mb-0">Live Mandi Prices</h2><small class="text-muted">Search a crop and state to see every available mandi district.</small>
+    </div></div>
+    <form id="mandiSearchForm" class="row g-2 align-items-end">
+      <div class="col-sm-5 col-md-4"><label class="form-label small mb-1" for="mandiCrop">Crop</label>
+        <input id="mandiCrop" class="form-control" list="cropOptions" placeholder="Crop (e.g., Cotton)" required />
+        <datalist id="cropOptions"><option value="Paddy"><option value="Tomato"><option value="Onion"><option value="Potato"><option value="Rice"><option value="Wheat"><option value="Maize"><option value="Cotton"></datalist>
       </div>
-    </div>
-  </div>
+      <div class="col-sm-5 col-md-4"><label class="form-label small mb-1" for="mandiState">State</label>
+        <input id="mandiState" class="form-control" list="stateOptions" placeholder="State (e.g., Telangana)" required />
+        <datalist id="stateOptions"><option value="Telangana"><option value="Andhra Pradesh"><option value="Karnataka"><option value="Maharashtra"><option value="Tamil Nadu"><option value="Uttar Pradesh"></datalist>
+      </div>
+      <div class="col-sm-2 col-md-2"><button id="fetchMandiPrices" class="btn btn-success w-100" type="submit"><i class="bi bi-cloud-download me-1"></i>Fetch Prices</button></div>
+    </form>
+    <div id="mandiStatus" class="small text-muted mt-3" aria-live="polite"></div>
+  </div></div>
 
-  <!-- Price Table -->
-  <div class="col-md-8">
-    <div class="card agri-card">
-      <div class="card-header fw-semibold"><i class="bi bi-table me-1"></i>All Crop Prices</div>
-      <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
-              <tr>
-                <th>Crop</th>
-                <th>Today (₹)</th>
-                <th>Yesterday (₹)</th>
-                <th>Change</th>
-                <th>Trend</th>
-              </tr>
-            </thead>
-            <tbody id="marketTable"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="row g-3 market-results-row">
+    <div class="col-12 col-xl-6"><div class="card agri-card market-result-card h-100"><div class="card-body">
+      <h2 class="h5 text-success mb-3">Live Prices</h2>
+      <div class="table-responsive market-table-scroll"><table class="table table-hover align-middle mb-0"><thead class="table-light"><tr><th>Market</th><th>District</th><th>Modal Price (Rs)</th><th>Date</th></tr></thead><tbody id="mandiTable"><tr><td colspan="4" class="text-muted p-4">Enter a crop and state to fetch prices.</td></tr></tbody></table></div>
+    </div></div></div>
 
-  <!-- Price Chart + AI -->
-  <div class="col-md-4">
-    <div class="card agri-card mb-3">
-      <div class="card-header fw-semibold"><i class="bi bi-bar-chart-fill text-warning me-1"></i>Top 8 Prices</div>
-      <div class="card-body">
-        <canvas id="marketChart" height="200"></canvas>
-      </div>
-    </div>
-    <div class="card agri-card">
-      <div class="card-header fw-semibold"><i class="bi bi-robot me-1 text-success"></i>Ask AgriBot</div>
-      <div class="card-body">
-        <div class="input-group input-group-sm mb-2">
-          <input type="text" id="marketAskInput" class="form-control" placeholder="What is tomato price today?"/>
-          <button class="btn btn-success" id="marketAskBtn"><i class="bi bi-send-fill"></i></button>
-        </div>
-        <div id="marketAiReply" class="small text-muted p-2 rounded" style="min-height:60px;background:var(--bs-secondary-bg)"></div>
-      </div>
-    </div>
+    <div class="col-12 col-xl-6"><div class="card agri-card market-result-card h-100"><div class="card-body"><div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3"><h2 class="h5 text-success mb-0">Prediction (Next 7 Days)</h2><button id="predictMandiPrices" class="btn btn-outline-success" type="button"><i class="bi bi-graph-up-arrow me-1"></i>Predict</button></div>
+      <div id="mandiPredictionNotice" class="alert alert-primary py-2 mb-3">Fetch prices first, then click Predict.</div>
+      <div class="table-responsive market-table-scroll"><table class="table align-middle mb-3"><thead class="table-light"><tr><th>Date</th><th>Predicted Modal Price (Rs)</th></tr></thead><tbody id="mandiPredictionTable"><tr><td colspan="2" class="text-muted">No prediction available yet.</td></tr></tbody></table></div>
+      <div class="market-chart"><canvas id="mandiPredictionChart"></canvas></div>
+    </div></div></div>
   </div>
 </div>
 {% endblock %}

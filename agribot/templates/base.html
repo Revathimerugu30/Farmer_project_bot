@@ -6,7 +6,7 @@
   <title>{% block title %}AgriBot – Smart Farming AI{% endblock %}</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v='dashboard-clean-3') }}"/>
 </head>
 <body>
 
@@ -24,13 +24,11 @@
     <a href="/soil-intel" class="nav-item {% if request.path=='/soil-intel' %}active{% endif %}"><i class="bi bi-cpu-fill"></i><span>Soil Intelligence</span></a>
     <a href="/crop"       class="nav-item {% if request.path=='/crop' %}active{% endif %}"><i class="bi bi-flower2"></i><span>Crop Advisor</span></a>
     <a href="/pest"       class="nav-item {% if request.path=='/pest' %}active{% endif %}"><i class="bi bi-bug-fill"></i><span>Pest Detection</span></a>
-    <a href="/market"     class="nav-item {% if request.path=='/market' %}active{% endif %}"><i class="bi bi-graph-up-arrow"></i><span>Market Prices</span></a>
+    <a href="/market"     class="nav-item {% if request.path=='/market' %}active{% endif %}"><i class="bi bi-shop"></i><span>Mandi Prices</span></a>
     <a href="/knowledge"  class="nav-item {% if request.path=='/knowledge' %}active{% endif %}"><i class="bi bi-book-fill"></i><span>Knowledge Base</span></a>
+    <a href="/kisan"      class="nav-item {% if request.path=='/kisan' %}active{% endif %}"><i class="bi bi-mortarboard-fill"></i><span>Kisan Sahayak</span></a>
     <a href="/profile"    class="nav-item {% if request.path=='/profile' %}active{% endif %}"><i class="bi bi-person-fill"></i><span>My Profile</span></a>
   </nav>
-  <div class="sidebar-footer">
-    <small class="text-muted">Powered by IBM Watsonx.ai</small>
-  </div>
 </div>
 
 <!-- Main Wrapper -->
@@ -45,9 +43,6 @@
       <button class="btn btn-sm btn-outline-secondary" id="darkModeToggle" title="Toggle Dark Mode">
         <i class="bi bi-moon-stars-fill"></i>
       </button>
-      <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">
-        <i class="bi bi-circle-fill me-1" style="font-size:8px;"></i>IBM Granite
-      </span>
     </div>
   </nav>
 

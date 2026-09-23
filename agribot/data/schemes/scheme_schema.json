@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "required": ["scheme_id", "scheme_name", "level", "state", "department", "description", "benefits", "eligibility", "documents", "official_source_url", "last_verified"],
+  "properties": {
+    "scheme_id": {"type": "string"},
+    "scheme_name": {"type": "string"},
+    "level": {"enum": ["Central", "State"]},
+    "state": {"type": "string"},
+    "department": {"type": "string"},
+    "description": {"type": "string"},
+    "benefits": {"type": "array", "items": {"type": "string"}},
+    "eligibility": {"type": "object"},
+    "documents": {"type": "array", "items": {"type": "string"}},
+    "application_process": {"type": "array", "items": {"type": "string"}},
+    "application_url": {"type": ["string", "null"]},
+    "official_source_url": {"type": "string", "format": "uri", "pattern": "^https://"},
+    "last_verified": {"type": "string", "format": "date"},
+    "keywords": {"type": "array", "items": {"type": "string"}}
+  }
+}

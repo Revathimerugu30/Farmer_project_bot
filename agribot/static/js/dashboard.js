@@ -4,14 +4,23 @@ let forecastChartInstance = null;
 
 document.addEventListener("DOMContentLoaded", async () => {
   await loadWeather();
-  await loadMarketSnippet();
   loadSoilPlaceholders();
   loadAlerts();
 });
 
 async function loadWeather() {
+  if (!navigator.geolocation) return;
+
   try {
-    const data = await apiFetch("/api/weather/current");
+    const position = await new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: false,
+        timeout: 10000,
+        maximumAge: 300000,
+      });
+    });
+    const { latitude, longitude } = position.coords;
+    const data = await apiFetch(`/api/weather/current?lat=${latitude}&lon=${longitude}`);
     const c = data.current;
     setText("dashTemp",     `${c.temperature}°C`);
     setText("dashHumidity", `${c.humidity}%`);
@@ -49,22 +58,6 @@ async function loadWeather() {
       });
     }
   } catch (e) { console.warn("Weather load failed", e); }
-}
-
-async function loadMarketSnippet() {
-  try {
-    const items = await apiFetch("/api/market/prices");
-    const el = document.getElementById("dashMarket");
-    if (!el) return;
-    el.innerHTML = items.slice(0, 8).map(item => `
-      <div class="market-mini-item">
-        <span>${item.crop}</span>
-        <span>₹${item.today_price}</span>
-        <span class="trend-${item.trend === 'up' ? 'up' : 'down'}">
-          ${item.trend === "up" ? "↑" : item.trend === "down" ? "↓" : "→"} ${Math.abs(item.change_pct)}%
-        </span>
-      </div>`).join("");
-  } catch (e) {}
 }
 
 function loadSoilPlaceholders() {

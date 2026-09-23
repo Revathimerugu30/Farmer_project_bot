@@ -3,121 +3,79 @@
 {% block page_title %}<i class="bi bi-speedometer2 me-1"></i> Dashboard{% endblock %}
 
 {% block content %}
-<div class="row g-3 mb-3">
-  <!-- Quick Stat Cards -->
-  <div class="col-6 col-md-3">
-    <div class="stat-card stat-card-green">
-      <div class="stat-icon"><i class="bi bi-cloud-sun-fill"></i></div>
-      <div class="stat-label">Temperature</div>
-      <div class="stat-value" id="dashTemp">--°C</div>
-    </div>
+<section class="dashboard-hero">
+  <div class="dashboard-hero-content">
+    <div class="dashboard-eyebrow"><i class="bi bi-stars"></i> Hello Farmer! <span>🌿</span></div>
+    <h1>Smarter Farming for a<br><strong>Better Tomorrow</strong></h1>
+    <p>Get real-time insights, expert advice and AI-powered<br class="d-none d-md-block"> solutions to grow healthier crops and higher yields.</p>
+    <a href="/chat" class="dashboard-hero-action"><i class="bi bi-chat-dots-fill"></i> Ask AgriBot <i class="bi bi-arrow-right"></i></a>
   </div>
-  <div class="col-6 col-md-3">
-    <div class="stat-card stat-card-blue">
-      <div class="stat-icon"><i class="bi bi-droplet-fill"></i></div>
-      <div class="stat-label">Humidity</div>
-      <div class="stat-value" id="dashHumidity">--%</div>
-    </div>
-  </div>
-  <div class="col-6 col-md-3">
-    <div class="stat-card stat-card-yellow">
-      <div class="stat-icon"><i class="bi bi-wind"></i></div>
-      <div class="stat-label">Wind Speed</div>
-      <div class="stat-value" id="dashWind">-- km/h</div>
-    </div>
-  </div>
-  <div class="col-6 col-md-3">
-    <div class="stat-card stat-card-orange">
-      <div class="stat-icon"><i class="bi bi-cloud-rain-fill"></i></div>
-      <div class="stat-label">Rainfall</div>
-      <div class="stat-value" id="dashRain">-- mm</div>
-    </div>
-  </div>
-</div>
+</section>
 
-<div class="row g-3">
-  <!-- AI Quick Chat -->
-  <div class="col-md-7">
-    <div class="card agri-card h-100">
-      <div class="card-header d-flex align-items-center gap-2">
-        <i class="bi bi-chat-dots-fill text-success"></i>
-        <span class="fw-semibold">Quick Ask AgriBot</span>
-        <a href="/chat" class="ms-auto btn btn-sm btn-outline-success">Full Chat →</a>
-      </div>
-      <div class="card-body p-0">
-        <div id="dashChatMessages" class="dash-chat-box px-3 py-2"></div>
-        <div class="p-3 border-top">
-          <div class="d-flex gap-2">
-            <input type="text" id="dashChatInput" class="form-control form-control-sm"
-              placeholder="Ask a farming question…" />
-            <button class="btn btn-success btn-sm px-3" id="dashChatSend">
-              <i class="bi bi-send-fill"></i>
-            </button>
-          </div>
-          <div class="suggested-chips mt-2 d-flex flex-wrap gap-1">
-            <span class="chip" onclick="dashQuick('Best crop for this season?')">🌾 Best crop?</span>
-            <span class="chip" onclick="dashQuick('How to improve soil fertility?')">🌱 Soil health</span>
-            <span class="chip" onclick="dashQuick('Which fertilizer for wheat?')">🧪 Fertilizer</span>
-            <span class="chip" onclick="dashQuick('Organic pest control methods?')">🐛 Pest control</span>
-          </div>
-        </div>
-      </div>
+<section class="dashboard-metrics" aria-label="Current weather">
+  <div class="dashboard-metric metric-temperature">
+    <i class="bi bi-cloud-sun-fill"></i><div><span>Temperature</span><strong id="dashTemp">--°C</strong></div>
+  </div>
+  <div class="dashboard-metric metric-humidity">
+    <i class="bi bi-droplet-fill"></i><div><span>Humidity</span><strong id="dashHumidity">--%</strong></div>
+  </div>
+  <div class="dashboard-metric metric-wind">
+    <i class="bi bi-wind"></i><div><span>Wind Speed</span><strong id="dashWind">-- km/h</strong></div>
+  </div>
+  <div class="dashboard-metric metric-rain">
+    <i class="bi bi-cloud-rain-fill"></i><div><span>Rainfall</span><strong id="dashRain">-- mm</strong></div>
+  </div>
+</section>
+
+<section class="dashboard-quick-ask agri-card">
+  <div class="dashboard-section-heading">
+    <span><i class="bi bi-chat-dots-fill"></i> Quick Ask AgriBot</span>
+    <a href="/chat" class="dashboard-link">Full Chat <i class="bi bi-arrow-right"></i></a>
+  </div>
+  <div id="dashChatMessages" class="dash-chat-box"></div>
+  <div class="dashboard-chat-controls">
+    <div class="dashboard-chat-row">
+      <input type="text" id="dashChatInput" class="form-control" placeholder="Ask a farming question..." />
+      <button class="dashboard-send" id="dashChatSend" title="Send question"><i class="bi bi-send-fill"></i></button>
+    </div>
+    <div class="suggested-chips">
+      <button class="chip" onclick="dashQuick('Best crop for this season?')"><i class="bi bi-flower1"></i> Best crop?</button>
+      <button class="chip" onclick="dashQuick('How to improve soil fertility?')"><i class="bi bi-layers-fill"></i> Soil health</button>
+      <button class="chip" onclick="dashQuick('Which fertilizer for wheat?')"><i class="bi bi-bag-fill"></i> Fertilizer</button>
+      <button class="chip" onclick="dashQuick('Organic pest control methods?')"><i class="bi bi-bug-fill"></i> Pest control</button>
+    </div>
+  </div>
+</section>
+
+<div class="row g-3 dashboard-lower-grid">
+  <div class="col-lg-8">
+    <div class="card agri-card dashboard-panel">
+      <div class="card-header dashboard-panel-heading"><span><i class="bi bi-bar-chart-fill text-primary"></i> 7-Day Forecast</span></div>
+      <div class="card-body"><canvas id="forecastChart" height="120"></canvas></div>
     </div>
   </div>
 
-  <!-- Market Snapshot -->
-  <div class="col-md-5">
-    <div class="card agri-card h-100">
-      <div class="card-header d-flex align-items-center gap-2">
-        <i class="bi bi-graph-up-arrow text-warning"></i>
-        <span class="fw-semibold">Market Snapshot</span>
-        <a href="/market" class="ms-auto btn btn-sm btn-outline-warning">Full Market →</a>
-      </div>
-      <div class="card-body p-0">
-        <div id="dashMarket" class="market-mini-list"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 7-day Forecast Chart -->
-  <div class="col-md-8">
-    <div class="card agri-card">
-      <div class="card-header">
-        <i class="bi bi-bar-chart-fill text-primary me-1"></i>
-        <span class="fw-semibold">7-Day Forecast</span>
-      </div>
-      <div class="card-body">
-        <canvas id="forecastChart" height="120"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <!-- Soil Health Indicator -->
-  <div class="col-md-4">
-    <div class="card agri-card h-100">
-      <div class="card-header">
-        <i class="bi bi-layers-fill text-brown me-1"></i>
-        <span class="fw-semibold">Soil Health</span>
-      </div>
-      <div class="card-body d-flex flex-column gap-2">
+  <div class="col-lg-4">
+    <div class="card agri-card dashboard-panel h-100">
+      <div class="card-header dashboard-panel-heading"><span><i class="bi bi-layers-fill"></i> Soil Health</span></div>
+      <div class="card-body dashboard-soil-body">
         <div>
-          <div class="d-flex justify-content-between mb-1"><small>Nitrogen (N)</small><small id="soilN">--</small></div>
-          <div class="progress" style="height:8px"><div class="progress-bar bg-success" id="soilNBar" style="width:0%"></div></div>
+          <div class="dashboard-soil-label"><small>Nitrogen (N)</small><small id="soilN">--</small></div>
+          <div class="progress dashboard-progress"><div class="progress-bar bg-success" id="soilNBar" style="width:0%"></div></div>
         </div>
         <div>
-          <div class="d-flex justify-content-between mb-1"><small>Phosphorus (P)</small><small id="soilP">--</small></div>
-          <div class="progress" style="height:8px"><div class="progress-bar bg-info" id="soilPBar" style="width:0%"></div></div>
+          <div class="dashboard-soil-label"><small>Phosphorus (P)</small><small id="soilP">--</small></div>
+          <div class="progress dashboard-progress"><div class="progress-bar bg-info" id="soilPBar" style="width:0%"></div></div>
         </div>
         <div>
-          <div class="d-flex justify-content-between mb-1"><small>Potassium (K)</small><small id="soilK">--</small></div>
-          <div class="progress" style="height:8px"><div class="progress-bar bg-warning" id="soilKBar" style="width:0%"></div></div>
+          <div class="dashboard-soil-label"><small>Potassium (K)</small><small id="soilK">--</small></div>
+          <div class="progress dashboard-progress"><div class="progress-bar bg-warning" id="soilKBar" style="width:0%"></div></div>
         </div>
-        <a href="/soil" class="btn btn-sm btn-outline-secondary mt-auto">Analyse My Soil →</a>
+        <a href="/soil" class="dashboard-outline-button">Analyse My Soil <i class="bi bi-arrow-right"></i></a>
       </div>
     </div>
   </div>
 
-  <!-- Soil Intelligence Quick Access -->
   <div class="col-md-6">
     <div class="card agri-card" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #bbf7d0;">
       <div class="card-body d-flex align-items-center gap-3">
@@ -135,7 +93,6 @@
     </div>
   </div>
 
-  <!-- Alerts -->
   <div class="col-md-6">
     <div class="card agri-card h-100">
       <div class="card-header">

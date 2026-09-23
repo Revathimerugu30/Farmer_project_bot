@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Kisan Sahayak - AgriBot{% endblock %}
+{% block page_title %}<i class="bi bi-mortarboard-fill me-1"></i> Kisan Sahayak{% endblock %}
+{% block content %}
+<div class="kisan-shell">
+  <section class="kisan-workspace">
+    <aside class="kisan-rail">
+      <div class="kisan-rail-title"><i class="bi bi-soundwave"></i><strong>Voice</strong></div>
+      <label class="kisan-toggle"><input id="kisanAutoSpeak" type="checkbox" checked><span class="kisan-check"></span><span>Speak answers automatically</span><i class="bi bi-question-circle" title="Read each answer aloud"></i></label>
+      <label class="kisan-rail-label" for="kisanSpeaker">Speaker</label>
+      <select id="kisanSpeaker" class="kisan-rail-select"><option>English voice</option><option>Telugu voice</option><option>Hindi voice</option></select>
+      <div class="kisan-rail-divider"></div>
+      <div class="kisan-rail-title"><i class="bi bi-envelope-paper"></i><strong>Email transcript</strong></div>
+      <label class="kisan-rail-label" for="kisanEmail">Send to</label>
+      <input id="kisanEmail" class="kisan-rail-input" type="email" placeholder="name@example.com">
+      <button id="kisanEmailSend" class="btn kisan-rail-button" type="button">Send transcript</button>
+      <div id="kisanEmailStatus" class="kisan-rail-status"></div>
+      <div class="kisan-rail-divider"></div>
+      <button id="kisanNewConversation" class="btn kisan-new-button" type="button"><i class="bi bi-pencil me-1"></i>New conversation</button>
+      <div class="kisan-session"><span id="kisanSessionLabel">Session ready</span><small id="kisanTurnLabel">0 turns</small></div>
+    </aside>
+    <div class="kisan-chat-panel">
+      <header class="kisan-chat-header"><div><span class="kisan-eyebrow">Farmer schemes assistant</span><h1>Kisan Sahayak</h1><p>Grounded answers about Indian government schemes, subsidies, eligibility, credit, insurance, and applications.</p></div><div class="kisan-status"><span class="kisan-status-dot"></span><span id="kisanCorpusStatus">Local scheme corpus ready</span></div></header>
+      <div id="kisanMessages" class="kisan-messages" aria-live="polite">
+        <div class="kisan-welcome"><div class="kisan-welcome-icon"><i class="bi bi-leaf-fill"></i></div><div><h2>How can I help your farm?</h2><p>Try asking about PM-KISAN eligibility, crop insurance, irrigation subsidies, or a scheme in your state.</p></div></div>
+      </div>
+      <form id="kisanAskForm" class="kisan-composer">
+        <div class="kisan-composer-options">
+          <div class="kisan-quick-row"><span>Try:</span><button class="kisan-suggestion" type="button" data-query="What farmer schemes can help with crop insurance?">Crop insurance</button><button class="kisan-suggestion" type="button" data-query="What documents are needed for PM-KISAN?">PM-KISAN documents</button><button class="kisan-suggestion" type="button" data-query="Are there subsidies for irrigation and farm ponds?">Irrigation subsidies</button><button class="kisan-suggestion" type="button" data-query="Government schemes for me">Government schemes for me</button></div>
+          <div class="kisan-composer-tools"><label for="kisanLanguage">Response language</label><select id="kisanLanguage"><option>English</option><option>Hindi</option><option selected>Telugu</option><option>Tamil</option><option>Kannada</option><option>Malayalam</option></select><label for="kisanSpeechLanguage">Read aloud</label><select id="kisanSpeechLanguage"><option selected>English</option><option>Hindi</option><option>Telugu</option><option>Tamil</option><option>Kannada</option><option>Malayalam</option></select><button id="kisanMic" class="btn btn-outline-success" type="button" title="Speak your question"><i class="bi bi-mic-fill"></i></button></div>
+        </div>
+        <div class="kisan-input-row"><textarea id="kisanQuery" rows="2" placeholder="Ask a question about farmer schemes..." required></textarea><button class="btn btn-success kisan-send" type="submit" title="Send question"><i class="bi bi-arrow-up"></i></button></div>
+        <div id="kisanVoiceStatus" class="small text-muted mt-2"></div>
+      </form>
+    </div>
+  </section>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/kisan.js') }}"></script>{% endblock %}

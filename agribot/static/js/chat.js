@@ -4,13 +4,6 @@ const chatMessages = document.getElementById("chatMessages");
 const chatInput    = document.getElementById("chatInput");
 const sendBtn      = document.getElementById("sendBtn");
 const clearChatBtn = document.getElementById("clearChatBtn");
-const modelBadge   = document.getElementById("modelBadge");
-
-// Load model badge
-fetch("/health").then(r => r.json()).then(d => {
-  if (modelBadge) modelBadge.textContent = d.model || "unknown";
-}).catch(() => {});
-
 // Load history on page load
 async function loadHistory() {
   try {

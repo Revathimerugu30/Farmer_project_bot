@@ -73,7 +73,7 @@ async function runAnalysis() {
   document.getElementById("siReportContent").innerHTML = `
     <div class="text-center py-5">
       <div class="spinner-border text-success mb-3" role="status"></div>
-      <p class="text-muted">AgriBot is analyzing your soil data with IBM Watsonx.ai…</p>
+      <p class="text-muted">AgriBot is analyzing your soil data…</p>
       <p class="text-muted small">This may take 15–30 seconds</p>
     </div>`;
 

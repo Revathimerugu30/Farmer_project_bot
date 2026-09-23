@@ -61,6 +61,10 @@ RAG_TOP_K         = int(os.getenv("RAG_TOP_K", "3"))
 DEFAULT_LATITUDE  = float(os.getenv("DEFAULT_LATITUDE",  "20.5937"))
 DEFAULT_LONGITUDE = float(os.getenv("DEFAULT_LONGITUDE", "78.9629"))
 
+# Government of India Agmarknet API
+DATA_GOV_API_KEY = os.getenv("DATA_GOV_API_KEY", "").strip()
+DATA_GOV_RESOURCE_ID = "9ef84268-d588-465a-a308-a864a43d0070"
+
 # ── Startup configuration diagnostic ──────────────────────────────────────────
 def _mask(value: str, keep: int = 6) -> str:
     """Mask a secret — show first `keep` chars then asterisks."""

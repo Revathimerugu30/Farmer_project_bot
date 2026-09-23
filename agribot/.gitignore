@@ -3,6 +3,19 @@ venv/
 
 # Environment variables
 .env
+.env.*
+!.env.example
+
+# Private keys, certificates, and credentials
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+credentials.json
+credentials.*.json
+secrets.json
+secrets.*.json
 
 # Python cache
 __pycache__/

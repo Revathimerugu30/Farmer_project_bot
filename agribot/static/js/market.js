@@ -1,99 +1,103 @@
-/* AgriBot – Market Prices JS */
+/* AgriBot - Live Mandi Prices */
 
-let allPrices = [];
-let marketChartInstance = null;
+let mandiPredictionChart = null;
+let latestMandiData = null;
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadPrices();
-  document.getElementById("refreshMarketBtn")?.addEventListener("click", loadPrices);
-  document.getElementById("marketSearch")?.addEventListener("input", filterTable);
-  document.getElementById("marketAskBtn")?.addEventListener("click", askMarket);
-  document.getElementById("marketAskInput")?.addEventListener("keydown", e => {
-    if (e.key === "Enter") askMarket();
+  document.getElementById("mandiSearchForm")?.addEventListener("submit", event => {
+    event.preventDefault();
+    loadMandiPrices();
   });
+  document.getElementById("predictMandiPrices")?.addEventListener("click", predictMandiPrices);
 });
 
-async function loadPrices() {
+async function loadMandiPrices() {
+  const crop = document.getElementById("mandiCrop")?.value.trim() || "";
+  const state = document.getElementById("mandiState")?.value.trim() || "";
+  const status = document.getElementById("mandiStatus");
+  const fetchButton = document.getElementById("fetchMandiPrices");
+  if (!crop || !state) {
+    if (status) status.textContent = "Enter both a crop and state to fetch prices.";
+    return;
+  }
+  if (status) status.textContent = "Fetching live Agmarknet mandi prices...";
+  if (fetchButton) {
+    fetchButton.disabled = true;
+    fetchButton.innerHTML = '<span class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>Fetching...';
+  }
+
   try {
-    allPrices = await apiFetch("/api/market/prices");
-    renderTable(allPrices);
-    renderChart(allPrices.slice(0, 8));
-  } catch (err) {
-    showToast("Failed to load prices: " + err.message, "danger");
+    const data = await apiFetch(`/api/market/live?commodity=${encodeURIComponent(crop)}&state=${encodeURIComponent(state)}&refresh=${Date.now()}`);
+    latestMandiData = data;
+    renderMandiTable(data.livePrices || []);
+    renderPredictions([]);
+    if (status) status.textContent = `${data.livePrices.length} real mandi prices found for ${crop} in ${state}. Click Predict for the next seven days.`;
+  } catch (error) {
+    latestMandiData = null;
+    if (status) status.textContent = error.message || "Unable to load live mandi prices.";
+    renderMandiTable([]);
+    renderPredictions([]);
+  } finally {
+    if (fetchButton) {
+      fetchButton.disabled = false;
+      fetchButton.innerHTML = '<i class="bi bi-cloud-download me-1"></i>Fetch Prices';
+    }
   }
 }
 
-function renderTable(prices) {
-  const tbody = document.getElementById("marketTable");
-  if (!tbody) return;
-  tbody.innerHTML = prices.map(p => `
-    <tr>
-      <td class="fw-semibold">${p.crop}</td>
-      <td>₹${p.today_price}</td>
-      <td class="text-muted">₹${p.yesterday_price}</td>
-      <td class="${p.trend === 'up' ? 'text-success' : p.trend === 'down' ? 'text-danger' : 'text-muted'}">
-        ${p.trend === "up" ? "▲" : p.trend === "down" ? "▼" : "–"} ${Math.abs(p.change_pct)}%
-      </td>
-      <td><span class="badge ${p.trend === 'up' ? 'bg-success' : p.trend === 'down' ? 'bg-danger' : 'bg-secondary'}">
-        ${p.trend}</span>
-      </td>
-    </tr>`).join("");
+function predictMandiPrices() {
+  const status = document.getElementById("mandiStatus");
+  if (!latestMandiData) {
+    if (status) status.textContent = "Fetch live prices first, then click Predict.";
+    return;
+  }
+  renderPredictions(latestMandiData.predictions || []);
+  if (status) status.textContent = `Seven-day prediction generated for ${latestMandiData.crop} in ${latestMandiData.state}.`;
 }
 
-function renderChart(prices) {
-  const ctx = document.getElementById("marketChart");
-  if (!ctx) return;
-  if (marketChartInstance) marketChartInstance.destroy();
+function renderMandiTable(rows) {
+  const table = document.getElementById("mandiTable");
+  if (!table) return;
+  table.innerHTML = rows.length ? rows.map(row => `
+    <tr><td>${escapeHtml(row.market)}</td><td>${escapeHtml(row.district)}</td>
+    <td>${row.modalPrice ? `₹${Number(row.modalPrice).toLocaleString("en-IN")}` : "-"}</td>
+    <td>${escapeHtml(row.date)}</td></tr>`).join("")
+    : '<tr><td colspan="4" class="text-muted p-4">No mandi records found for this crop and state.</td></tr>';
+}
 
-  marketChartInstance = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: prices.map(p => p.crop),
-      datasets: [{
-        label: "Today ₹/quintal",
-        data: prices.map(p => p.today_price),
-        backgroundColor: prices.map(p =>
-          p.trend === "up" ? "rgba(22,163,74,.7)" :
-          p.trend === "down" ? "rgba(220,38,38,.7)" : "rgba(99,102,241,.7)"
-        ),
-        borderRadius: 6,
-      }],
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { display: false } },
-      scales: {
-        y: { ticks: { callback: v => "₹" + v } },
-        x: { ticks: { font: { size: 10 } } },
-      },
-    },
+function renderPredictions(predictions) {
+  const table = document.getElementById("mandiPredictionTable");
+  const notice = document.getElementById("mandiPredictionNotice");
+  if (table) table.innerHTML = predictions.length ? predictions.map(item => `
+    <tr><td>${item.date}</td><td>${Number(item.predictedModalPrice).toLocaleString("en-IN")}</td></tr>`).join("")
+    : '<tr><td colspan="2" class="text-muted">Prediction is unavailable until numeric mandi prices are found.</td></tr>';
+  if (notice) {
+    if (!predictions.length) {
+      notice.textContent = "Fetch live prices, then click Predict to calculate the seven-day trend.";
+    } else {
+      const firstPrice = Number(predictions[0].predictedModalPrice);
+      const lastPrice = Number(predictions[predictions.length - 1].predictedModalPrice);
+      const direction = lastPrice > firstPrice ? "increasing" : lastPrice < firstPrice ? "decreasing" : "stable";
+      notice.textContent = `Prices are ${direction} over the next 7 days: ₹${firstPrice.toLocaleString("en-IN")} to ₹${lastPrice.toLocaleString("en-IN")}.`;
+    }
+  }
+
+  const canvas = document.getElementById("mandiPredictionChart");
+  if (!canvas || typeof Chart === "undefined") return;
+  if (mandiPredictionChart) mandiPredictionChart.destroy();
+  mandiPredictionChart = new Chart(canvas, {
+    type: "line",
+    data: { labels: predictions.map(item => item.date), datasets: [{
+      label: "Predicted Modal Price (Rs)", data: predictions.map(item => item.predictedModalPrice),
+      borderColor: "#2d8585", backgroundColor: "rgba(45,133,133,.16)", fill: true, tension: .25,
+    }]},
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "top" } },
+      scales: { y: { ticks: { callback: value => "₹" + Number(value).toLocaleString("en-IN") } } } },
   });
 }
 
-function filterTable() {
-  const q = document.getElementById("marketSearch")?.value.toLowerCase() || "";
-  renderTable(allPrices.filter(p => p.crop.toLowerCase().includes(q)));
-}
-
-async function askMarket() {
-  const input = document.getElementById("marketAskInput");
-  const reply = document.getElementById("marketAiReply");
-  const msg   = input?.value.trim();
-  if (!msg) return;
-
-  if (reply) reply.textContent = "Thinking…";
-
-  // Build price context
-  const ctx = allPrices.slice(0, 10).map(p =>
-    `${p.crop}: ₹${p.today_price}/quintal (${p.trend})`).join(", ");
-
-  try {
-    const data = await apiFetch("/api/chat/message", {
-      method: "POST",
-      body: JSON.stringify({ message: msg + `\n\nMarket prices context: ${ctx}` }),
-    });
-    if (reply) reply.innerHTML = renderMarkdown(data.reply);
-  } catch (err) {
-    if (reply) reply.textContent = "Error: " + err.message;
-  }
+function escapeHtml(value) {
+  const div = document.createElement("div");
+  div.textContent = value == null ? "-" : String(value);
+  return div.innerHTML;
 }

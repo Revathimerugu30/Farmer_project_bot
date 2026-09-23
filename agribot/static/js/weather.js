@@ -3,15 +3,19 @@
 let weatherChartInstance = null;
 
 document.addEventListener("DOMContentLoaded", () => {
-  fetchWeather();
+  useGeoLocation();
   document.getElementById("fetchWeatherBtn")?.addEventListener("click", fetchWeather);
   document.getElementById("geoLocBtn")?.addEventListener("click", useGeoLocation);
   document.getElementById("askWeatherBtn")?.addEventListener("click", askWeatherQuestion);
 });
 
 async function fetchWeather() {
-  const lat = parseFloat(document.getElementById("latInput")?.value || 20.5937);
-  const lon = parseFloat(document.getElementById("lonInput")?.value || 78.9629);
+  const lat = parseFloat(document.getElementById("latInput")?.value);
+  const lon = parseFloat(document.getElementById("lonInput")?.value);
+
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+    return useGeoLocation();
+  }
 
   try {
     const data = await apiFetch(`/api/weather/current?lat=${lat}&lon=${lon}`);
@@ -94,8 +98,8 @@ function renderAdvisory(current, forecast) {
 }
 
 async function askWeatherQuestion() {
-  const lat = parseFloat(document.getElementById("latInput")?.value || 20.5937);
-  const lon = parseFloat(document.getElementById("lonInput")?.value || 78.9629);
+  const lat = parseFloat(document.getElementById("latInput")?.value);
+  const lon = parseFloat(document.getElementById("lonInput")?.value);
   const el = document.getElementById("weatherAdvisory");
   if (el) el.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
 
@@ -119,6 +123,10 @@ function useGeoLocation() {
     document.getElementById("latInput").value = pos.coords.latitude.toFixed(4);
     document.getElementById("lonInput").value = pos.coords.longitude.toFixed(4);
     fetchWeather();
+  }, () => showToast("Location permission is required to load local weather", "warning"), {
+    enableHighAccuracy: false,
+    timeout: 10000,
+    maximumAge: 300000,
   });
 }
 

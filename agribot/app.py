@@ -25,6 +25,7 @@ from routes.pest_routes       import pest_bp
 from routes.market_routes     import market_bp
 from routes.profile_routes    import profile_bp
 from routes.rag_routes        import rag_bp
+from routes.kisan_routes      import kisan_bp
 
 logging.basicConfig(
     level=logging.DEBUG if config.DEBUG else logging.INFO,
@@ -62,6 +63,7 @@ def create_app() -> Flask:
     app.register_blueprint(market_bp,     url_prefix="/api/market")
     app.register_blueprint(profile_bp,    url_prefix="/api/profile")
     app.register_blueprint(rag_bp,        url_prefix="/api/rag")
+    app.register_blueprint(kisan_bp,      url_prefix="/api/kisan")
 
     # ── Pages ─────────────────────────────────────────────────────────────────
     @app.route("/")
@@ -101,6 +103,10 @@ def create_app() -> Flask:
     @app.route("/knowledge")
     def knowledge():
         return render_template("knowledge.html")
+
+    @app.route("/kisan")
+    def kisan():
+        return render_template("kisan.html")
 
     @app.route("/soil-intel")
     def soil_intel():

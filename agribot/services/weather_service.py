@@ -12,6 +12,10 @@ logger = logging.getLogger(__name__)
 
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
 
+
+class WeatherUnavailableError(RuntimeError):
+    """Raised when the weather provider cannot return live data."""
+
 WMO_CODES = {
     0: "Clear sky", 1: "Mainly clear", 2: "Partly cloudy", 3: "Overcast",
     45: "Fog", 48: "Depositing rime fog",
@@ -46,7 +50,7 @@ def get_weather(latitude: float, longitude: float) -> dict:
         return _parse(data)
     except Exception as exc:
         logger.error("Weather fetch error: %s", exc)
-        return _mock_weather()
+        raise WeatherUnavailableError("live weather data could not be loaded") from exc
 
 
 def _parse(data: dict) -> dict:
@@ -101,17 +105,3 @@ def weather_to_text(weather: dict) -> str:
     return "\n".join(lines)
 
 
-def _mock_weather() -> dict:
-    """Return sample data when API is unreachable."""
-    return {
-        "current": {
-            "temperature": 28, "humidity": 65,
-            "wind_speed": 12, "precipitation": 0,
-            "condition": "Partly cloudy", "time": "N/A",
-        },
-        "forecast": [
-            {"date": "Day 1", "max_temp": 32, "min_temp": 22, "precipitation": 2, "condition": "Partly cloudy"},
-            {"date": "Day 2", "max_temp": 30, "min_temp": 21, "precipitation": 5, "condition": "Light rain"},
-            {"date": "Day 3", "max_temp": 29, "min_temp": 20, "precipitation": 8, "condition": "Moderate rain"},
-        ],
-    }
